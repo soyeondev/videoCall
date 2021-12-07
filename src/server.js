@@ -15,11 +15,12 @@ const httpServer = http.createServer(app);
 const wsServer = SocketIO(httpServer);
 
 wsServer.on("connection", socket => {
+    socket.onAny((event) => {   // 모든 이벤트를 살핌
+        console.log(`Socket Event: ${event}`)
+    })
     socket.on("enter_room", (roomName, done) => {
-        console.log(roomName)
-        setTimeout(() => {
-            done("hello from backend");
-        }, 5000)
+        socket.join(roomName)
+        done();
     });
 })
 

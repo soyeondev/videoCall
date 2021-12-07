@@ -2,9 +2,17 @@ const socket = io();
 
 const welcome = document.getElementById("welcome")
 const form = welcome.querySelector("form")
+const room = document.getElementById("room")
 
-function backendDone(msg){
-    console.log("the backend says : ", msg)
+room.hidden = true
+
+let roomName;
+
+function showRoom(){
+    welcome.hidden = true
+    room.hidden = false
+    const h3 = room.querySelector("h3")
+    h3.innerText = `Room ${roomName}`
 }
 
 function handleRoomSubmit(event){
@@ -13,8 +21,10 @@ function handleRoomSubmit(event){
     socket.emit(
         "enter_room", 
         input.value,
-        backendDone
+        showRoom
     )
+    roomName = input.value
+    console.log("roomName: ", roomName)
     input.value =""
 }
 
