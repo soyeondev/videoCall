@@ -22,6 +22,7 @@ function handleNicknameSubmit(event) {
     event.preventDefault()
     const input = room.querySelector("#name input")
     socket.emit("nickname", input.value)
+    
 }
 
 function showRoom(){
@@ -66,3 +67,15 @@ socket.on("bye", (left) => {
 })
 
 socket.on("new_message", (msg) => addMessage(msg))
+
+socket.on("room_change", (rooms) => {
+    const roomList = welcome.querySelector("ul")
+    console.log(`rooms: ${rooms}`)
+    roomList.innerHTML = ''
+    if(rooms.length === 0) return
+    rooms.forEach(room => {
+        const li = document.createElement("li")
+        li.innerText = room;
+        roomList.append(li)
+    })
+});
