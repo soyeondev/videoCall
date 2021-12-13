@@ -59,7 +59,6 @@ async function getMedia(deviceId){
 }
 
 function handleMuteClick(){
-    console.log(myStream.getAudioTracks())
     myStream.getAudioTracks().forEach(track => {
         track.enabled = !track.enabled
     });
@@ -74,7 +73,6 @@ function handleMuteClick(){
 }
 
 function handleCameraClick(){
-    console.log(myStream.getVideoTracks())
     myStream.getVideoTracks().forEach(track => {
         track.enabled = !track.enabled
     })
