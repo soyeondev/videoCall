@@ -130,24 +130,38 @@ socket.on("offer", async offer => {
     myPeerConnection.setLocalDescription(answer);
     socket.emit("answer", answer, rooName)
     console.log("sent the offer")
-    console.log(offer);
 })
 
 socket.on("answer", answer => {
-    // console.log("answer in browser: ", answer)
+    console.log("receive the answer ")
     myPeerConnection.setRemoteDescription(answer);
+})
+
+socket.on("ice", ice => {
+    console.log("receive candidate")
+    myPeerConnection.addIceCandidate(ice);
 })
 
 // RTC Code
 function makeConnection(){
+    console.log("make connection ???")
     myPeerConnection = new RTCPeerConnection();
-    // myPeerConnection.addEventListener("icecandidate", handleIce);
+    myPeerConnection.addEventListener("icecandidate", handleIce);
+    myPeerConnection.addEventListener("addstream", handleAddStream);
     myStream.getTracks().forEach(track => {
         myPeerConnection.addTrack(track, myStream);
     })
 }
 
 function handleIce(data){
-    // console.log("got ice candidate")
-    // console.log(data)
+    console.log("sent candidate")
+    socket.emit("ice", data.candidate, rooName)
+}
+
+function handleAddStream(data){
+    const peersStream = document.getElementById("peersStream")
+    console.log("got an event from my peer")
+    console.log("Peer's Stream ", data.stream)
+    console.log("My Stream ", myStream)
+    peersStream.srcObject = data.stream
 }
